@@ -9,9 +9,12 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 # return unless Rails.env.test?
 require 'rspec/rails'
 require 'capybara/rails'
+<<<<<<< HEAD
 require 'capybara/rspec'
 
 
+=======
+>>>>>>> 0ff8f03 (try_signin)
 # Add additional requires below this line. Rails is not loaded until this point!
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
@@ -39,6 +42,7 @@ rescue ActiveRecord::PendingMigrationError => e
   abort e.to_s.strip
 end
 RSpec.configure do |config|
+<<<<<<< HEAD
 
   config.include FactoryBot::Syntax::Methods
   config.include Devise::Test::IntegrationHelpers, type: :system
@@ -53,6 +57,8 @@ RSpec.configure do |config|
   end
 
   
+=======
+>>>>>>> 0ff8f03 (try_signin)
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_paths = [
     Rails.root.join('spec/fixtures')
@@ -87,5 +93,8 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
+<<<<<<< HEAD
   
+=======
+>>>>>>> 0ff8f03 (try_signin)
 end

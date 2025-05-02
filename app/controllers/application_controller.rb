@@ -10,4 +10,7 @@ class ApplicationController < ActionController::Base
   end
   allow_browser versions: :modern
 end
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0ff8f03 (try_signin)

@@ -63,6 +63,7 @@ group :test do
   gem "selenium-webdriver"
 end
 
+<<<<<<< HEAD
 group :development, :test do
   gem 'factory_bot_rails'
 end
@@ -71,3 +72,6 @@ end
 gem "devise", "~> 4.9"
 
 
+=======
+gem "devise", "~> 4.9"
+>>>>>>> 0ff8f03 (try_signin)
