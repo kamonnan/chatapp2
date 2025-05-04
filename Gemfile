@@ -41,8 +41,7 @@ gem "thruster", require: false
 # gem "image_processing", "~> 1.2"
 
 group :development, :test do
-  gem "rspec-rails"
-  gem "capybara"
+  gem 'rspec-rails', '~> 8.0.0'
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
 
@@ -64,15 +63,4 @@ group :test do
   gem "selenium-webdriver"
 end
 
-<<<<<<< HEAD
-group :development, :test do
-  gem 'factory_bot_rails'
-end
-
-
 gem "devise", "~> 4.9"
-
-
-=======
-gem "devise", "~> 4.9"
->>>>>>> 0ff8f03 (try_signin)
