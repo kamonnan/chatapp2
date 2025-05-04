@@ -71,8 +71,6 @@ RSpec.describe "User username editing", type: :feature do
     fill_in "Current password", with: "password"
     click_button "Update"
 
-    # สมมุติว่าหลังจากอัปเดต username แล้ว หน้าเว็บเปลี่ยนไปหน้าโปรไฟล์หรือหน้าหลัก
-    # ที่มีข้อความแสดงชื่อใหม่
     expect(page).to have_text(/Welcome, updateduser|updateduser/)
 
     puts "\e[32m[PASS]\e[0m updated username is reflected in the UI ✅"
