@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe "User username editing", type: :feature do
-  let(:user) { create(:user, username: "oldusername", password: "password") }
+  let(:user) { FactoryBot.create(:user, username: "oldusername", password: "password") }
   
   before do
     # Sign in the user
@@ -51,7 +51,7 @@ RSpec.describe "User username editing", type: :feature do
   end
 
   scenario "username is unique" do
-    other_user = create(:user, username: "takenusername")
+    other_user = FactoryBot.create(:user, username: "takenusername")
 
     visit edit_user_registration_path
 
@@ -71,6 +71,8 @@ RSpec.describe "User username editing", type: :feature do
     fill_in "Current password", with: "password"
     click_button "Update"
 
+    # สมมุติว่าหลังจากอัปเดต username แล้ว หน้าเว็บเปลี่ยนไปหน้าโปรไฟล์หรือหน้าหลัก
+    # ที่มีข้อความแสดงชื่อใหม่
     expect(page).to have_text(/Welcome, updateduser|updateduser/)
 
     puts "\e[32m[PASS]\e[0m updated username is reflected in the UI ✅"
