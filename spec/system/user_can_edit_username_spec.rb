@@ -1,81 +1,85 @@
 require 'rails_helper'
 
-RSpec.describe "User username editing", type: :feature do
-  let(:user) { FactoryBot.create(:user, username: "oldusername", password: "password") }
-  
-  before do
-    # Sign in the user
-    visit new_user_session_path
-    fill_in "Email", with: user.email
-    fill_in "Password", with: "password"
-    click_button "Log in"
+RSpec.describe "User can edit his username", type: :feature do
+  context "when user exists" do
+    let(:user) { FactoryBot.create(:user, username: "oldusername", password: "password") }
+
+    context "when user logs in" do
+      before do
+        # Sign in the user
+        visit new_user_session_path
+        fill_in "Email", with: user.email
+        fill_in "Password", with: "password"
+        click_button "Log in"
+      end
+
+      it "allows user to change his username" do
+        # Visit the user edit form
+        visit edit_user_registration_path
+
+        # Check current username in the form
+        expect(find_field("Username").value).to eq(user.username)
+
+        # Fill in new username and current password
+        fill_in "Username", with: "newusername"
+        fill_in "Current password", with: "password"
+        click_button "Update"
+
+        # Expect the page to reflect updated username
+        expect(page).to have_content("Welcome, newusername")
+        expect(user.reload.username).to eq("newusername")
+      end
+
+      it "does not allow blank username" do
+        # Visit edit form and leave username blank
+        visit edit_user_registration_path
+
+        fill_in "Username", with: ""
+        fill_in "Current password", with: "password"
+        click_button "Update"
+
+        # Expect error message
+        expect(page).to have_content("Username can't be blank")
+      end
+
+      it "does not allow update without current password" do
+        # Visit edit form without entering current password
+        visit edit_user_registration_path
+
+        fill_in "Username", with: "newusername"
+        click_button "Update"
+
+        # Expect error message
+        expect(page).to have_content("Current password can't be blank")
+      end
+
+      context "when another user exists" do
+        let!(:other_user) { FactoryBot.create(:user, username: "takenusername") }
+
+        it "does not allow duplicate username" do
+          # Try to update to a username that already exists
+          visit edit_user_registration_path
+
+          fill_in "Username", with: "takenusername"
+          fill_in "Current password", with: "password"
+          click_button "Update"
+
+          # Expect uniqueness validation error
+          expect(page).to have_content("Username has already been taken")
+        end
+      end
+
+      it "reflects updated username in the UI" do
+        # Update to a new username
+        visit edit_user_registration_path
+
+        fill_in "Username", with: "updateduser"
+        fill_in "Current password", with: "password"
+        click_button "Update"
+
+        # Expect new username to appear in UI
+        expect(page).to have_text(/Welcome, updateduser|updateduser/)
+      end
+    end
   end
-
-  scenario "user can edit username" do
-    visit edit_user_registration_path
-    
-    expect(find_field("Username").value).to eq(user.username)
-    
-    fill_in "Username", with: "newusername"
-    fill_in "Current password", with: "password"
-    click_button "Update"
-    
-    expect(page).to have_content("Welcome, newusername")
-    expect(user.reload.username).to eq("newusername")
-
-    puts "\e[32m[PASS]\e[0m user can edit username ✅"
-  end
-
-  scenario "user cannot update with invalid username" do
-    visit edit_user_registration_path
-
-    fill_in "Username", with: ""
-    fill_in "Current password", with: "password"
-    click_button "Update"
-    
-    expect(page).to have_content("Username can't be blank")
-
-    puts "\e[32m[PASS]\e[0m user cannot update with invalid username ✅"
-  end
-
-  scenario "user cannot update without current password" do
-    visit edit_user_registration_path
-
-    fill_in "Username", with: "newusername"
-    # No current password
-    click_button "Update"
-
-    expect(page).to have_content("Current password can't be blank")
-
-    puts "\e[32m[PASS]\e[0m user cannot update without current password ✅"
-  end
-
-  scenario "username is unique" do
-    other_user = FactoryBot.create(:user, username: "takenusername")
-
-    visit edit_user_registration_path
-
-    fill_in "Username", with: "takenusername"
-    fill_in "Current password", with: "password"
-    click_button "Update"
-
-    expect(page).to have_content("Username has already been taken")
-
-    puts "\e[32m[PASS]\e[0m username is unique ✅"
-  end
-
-  scenario "updated username is reflected in the UI" do
-    visit edit_user_registration_path
-
-    fill_in "Username", with: "updateduser"
-    fill_in "Current password", with: "password"
-    click_button "Update"
-
-    # สมมุติว่าหลังจากอัปเดต username แล้ว หน้าเว็บเปลี่ยนไปหน้าโปรไฟล์หรือหน้าหลัก
-    # ที่มีข้อความแสดงชื่อใหม่
-    expect(page).to have_text(/Welcome, updateduser|updateduser/)
-
-    puts "\e[32m[PASS]\e[0m updated username is reflected in the UI ✅"
-  end
-
 end
