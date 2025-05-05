@@ -83,3 +83,4 @@ RSpec.describe "User can edit his username", type: :feature do
     end
   end
 end
+
